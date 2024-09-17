@@ -10,9 +10,9 @@ Given a probability vector $p$ of length $n$, if the _Guesser_ chooses $k$, the 
 
 $$
 U_n^k(p) =
-    \left( \sum_{i\<k} p_i \right) V_{k-1} \left( \left[ \frac{p_j}{\sum_{i\<k} p_i} \middle| j\<k \right] \right) +
+    \left( \sum_{i\lt k} p_i \right) V_{k-1} \left( \left[ \frac{p_j}{\sum_{i\lt k} p_i} \middle| j\lt k \right] \right) +
     p_k +
-    \left( \sum_{i\>k} p_i \right) V_{n-k} \left( \left[ \frac{p_j}{\sum_{i\>k} p_i} \middle| j\>k \right] \right)
+    \left( \sum_{i\gt k} p_i \right) V_{n-k} \left( \left[ \frac{p_j}{\sum_{i\gt k} p_i} \middle| j\gt k \right] \right)
 $$
 
 where $V_n$ is the optimal choice
