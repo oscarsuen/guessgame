@@ -8,11 +8,7 @@ Let there by two players, a _Picker_ and a _Guesser_.  The _Picker_ chooses a nu
 ## Analysis
 Given a probability vector $p$ of length $n$, if the _Guesser_ chooses $k$, the expected number of guesses is
 
-$$ U_n^k(p) = 
-    \left(\sum_{i<k}p_i\right) V_{k-1}\left(\left[\frac{p_j}{\sum_{i<k}p_i}\middle| j<k\right]\right) +
-    p_k +
-    \left(\sum_{i>k}p_i\right) V_{n-k}\left(\left[\frac{p_j}{\sum_{i>k}p_i}\middle| j>k\right]\right)
-$$
+$$ U_n^k(p) = \left(\sum_{i<k}p_i\right) V_{k-1}\left(\left[\frac{p_j}{\sum_{i<k}p_i}\middle| j<k\right]\right) + p_k + \left(\sum_{i>k}p_i\right) V_{n-k}\left(\left[\frac{p_j}{\sum_{i>k}p_i}\middle| j>k\right]\right) $$
 
 where $V_n$ is the optimal choice
 
@@ -50,7 +46,7 @@ Solutions for $N\leq6$ found by Z3.  Remainder found by `scipy.optimize.minimize
 
 ## Repo
 ### [`pick-choose.nb`](z3solve.py)
-Exploratory work in a Mathematica notebook.  Solves up to $N=5$.
+Exploratory work in a Mathematica notebook.  Solves up to $N=4$.
 
 ### [`z3solve.py`](z3solve.py)
 Requirements: [z3-solver](https://github.com/Z3Prover/z3)
