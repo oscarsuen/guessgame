@@ -1,6 +1,5 @@
 from utils import *
 from z3 import *
-from fractions import Fraction
 from math import lcm
 
 set_param("parallel.enable", True)

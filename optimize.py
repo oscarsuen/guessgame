@@ -2,7 +2,6 @@ from utils import *
 from fractions import Fraction
 from math import lcm, floor
 from functools import cache
-import json
 import numpy as np
 from scipy.special import logit, expit
 from scipy.optimize import minimize
