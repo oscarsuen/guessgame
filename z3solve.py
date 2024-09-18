@@ -40,7 +40,7 @@ def v(p):
     return simplify(rtn)
 
 
-def problem(N, full=False, **kwargs):
+def problem(N, full=False, filename=None, **kwargs):
     s = Solver()
     p = RealVector('p', N)
     u = Real('u')
@@ -66,6 +66,11 @@ def problem(N, full=False, **kwargs):
         uk = simplify(uk)
         s.add(uk == u)
 
+    if filename is not None:
+        with open(filename, 'w') as f:
+            f.write(s.sexpr())
+            f.write("(check-sat)\n")
+            f.write("(get-model)\n")
     return s
 
 
