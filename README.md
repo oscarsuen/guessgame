@@ -66,22 +66,3 @@ Requirements: [SciPy](https://scipy.org/)
 `exact(N)` and `approx(N)` return dictionaries of either exact or approximate solutions for $N$.
 
 Exact solutions up to $N=16$ computable.  Approximate solutions up to $N\approx40$ computable.
-
-## TODOs/Ideas/Issues
-- SciPy
-    - [ ] Other packages: [NLopt](https://nlopt.readthedocs.io/en/latest/), [ALGLIB](https://www.alglib.net/)
-    - [x] For each call of `v(p)` cache intermediate calls with dynamic programming.  (`functools.cache` causes unhashable `ndarray` error)
-    - [x] Remove unnecessary `p[i]`s.
-    - [x] Convert to `Fraction`s.
-    - [x] Find nice way to find rational solution from approximate one.
-    - [x] Better initial guess.
-    - [ ] Objective function scaling
-    - [x] JSON output when solution found
-- Z3
-    - [ ] Other packages: [CVC](https://cvc5.github.io/docs-ci/docs-main/), [pySMT](https://pysmt.readthedocs.io/en/latest/index.html), [sbv](https://hackage.haskell.org/package/sbv)
-    - [ ] Figure out what `/0` is in solution.
-    - [ ] Remove unnecesary `p[i]` instead of adding equality constraint.
-    - [ ] Figure out if adding `p[i]<1` constraint helps.
-    - [ ] Find a way to benchmark ($N=6$ too fast and $N=7$ too slow).
-    - [ ] [Horn Clause Solver](https://theory.stanford.edu/~nikolaj/programmingz3.html#sec-horn-clause-solver) for $V_k$ function.  Might have to compute for each $k$.
-    - [ ] Add variables for `v(i, j)`
