@@ -40,31 +40,57 @@ def v(p):
     return simplify(rtn)
 
 
-def problem(N, full=False, filename=None, **kwargs):
+def problem(N, full=False, uv=False, filename=None, **kwargs):
     s = Solver()
-    p = RealVector('p', N)
-    u = Real('u')
+    pvar = RealVector('p', N)
+    ueq = Real('u')
+    if uv:
+        vvar = [[Real(f"v__{i}__{j}") for j in range(i, N+1)] for i in range(N+1)]
+        def getv(i, j):
+            return vvar[i][j-i]
+        uvar = [[[Real(f"u__{i}__{j}__{k}") for k in range(i, j)] for j in range(i, N+1)] for i in range(N+1)]
+        def getu(i, j, k):
+            return uvar[i][j-i][k-i]
 
-    for pi in p:
+    for pi in pvar:
         if full or N == 1:
             s.add(pi >= 0)
         else:
             s.add(pi > 0)
             s.add(pi < 1)
-    s.add(Sum(p) == 1)
+    s.add(Sum(pvar) == 1)
 
     if not full:
         for i in range(N//2):
-            s.add(p[i] == p[-i-1])
+            s.add(pvar[i] == pvar[-i-1])
 
     if not full:
         for i in range(1, (N+1)//2):
-            s.add(p[i-1] > p[i])
+            s.add(pvar[i-1] > pvar[i])
+
+    if uv:
+        for i in range(N+1):
+            for j in range(i, N+1):
+                for k in range(i, j):
+                    s.add(getu(i, j, k) == 1 + (Sum(pvar[i:k])*getv(i,k)+Sum(pvar[k+1:j])*getv(k+1,j))/Sum(pvar[i:j]))
+
+        for i in range(N+1):
+            for j in range(i, N+1):
+                if i == j:
+                    s.add(getv(i, j) == 0)
+                    continue
+                s.add(Or(*(getv(i, j) == getu(i, j, k) for k in range(i, j))))
+                s.add(And(*(getv(i, j) <= getu(i, j, k) for k in range(i, j))))
+                # for k in range(i, j):
+                #     s.add(getv(i, j) <= getu(i, j, k))
 
     for k in range(N if full else (N+1)//2):
-        uk = RealVal(1) + Sum(p[:k]) * v(p[:k]) + Sum(p[k+1:]) * v(p[k+1:])
-        uk = simplify(uk)
-        s.add(uk == u)
+        if uv:
+            s.add(getu(0, N, k) == ueq)
+        else:
+            uk = RealVal(1) + Sum(pvar[:k]) * v(pvar[:k]) + Sum(pvar[k+1:]) * v(pvar[k+1:])
+            uk = simplify(uk)
+            s.add(uk == ueq)
 
     if filename is not None:
         with open(filename, 'w') as f:
