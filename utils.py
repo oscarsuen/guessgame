@@ -2,6 +2,17 @@ import json
 from functools import cache
 
 
+def get_params(filename="params.json"):
+    try:
+        with open(filename, 'r') as f:
+            return json.load(f)
+    except FileNotFoundError:
+        return {}
+
+
+params = get_params()
+
+
 def vr(p):
     if sum(p) == 0:
         return 0

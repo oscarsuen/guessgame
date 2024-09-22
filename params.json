@@ -1,0 +1,7 @@
+{
+    "denom": 500000,
+    "randinit": 0.1,
+    "tol": 1e-15,
+    "maxiter": 500,
+    "maxtries": 5
+}

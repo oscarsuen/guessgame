@@ -118,12 +118,6 @@ def solution(m, N, printing=True, **kwargs):
     return json_d
 
 
-kwargs = {"denom": 5000,
-          "randinit": 0.1,
-          "tol": 1e-15,
-          "maxiter": 500}
-
-
 def exact(N, maxtries=3, printing=True, **kwargs):
     def get():
         if printing:
