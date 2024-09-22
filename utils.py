@@ -27,7 +27,8 @@ def vr(p):
     )/sum(p)
 
 
-def vc(p):
+def vc(p, u=False):
+    n = len(p)
     @cache
     def s(i, j):
         return sum(p[i:j])
@@ -40,7 +41,9 @@ def vc(p):
             s(i, k) * w(i, k) + s(k+1, j) * w(k+1, j)
             for k in range(i, j)
         )/t
-    return w(0, len(p))
+    if u:
+        return (1 + s(0, k)*w(0, k) + s(k+1, n)*w(k+1, n) for k in range(n))
+    return w(0, n)
 
 
 def tree(p, ki=None):
@@ -64,6 +67,10 @@ def tree(p, ki=None):
         return (ks, rec(i, ks), rec(ks+1, j))
     # return rec(0, len(p))
     return rec(0, len(p)) if ki is None else (ki, rec(0, ki), rec(ki+1, len(p)))
+
+
+def fraclist_str(lst):
+    return '[' + ", ".join(f"{f.numerator}/{f.denominator}" for f in lst) + ']'
 
 
 def to_latex(d):

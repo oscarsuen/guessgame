@@ -17,26 +17,28 @@ def mirror(p, n):
 def v(p, n, u=False):
     p = np.array(p)
     p = mirror(p, n)
-    @cache
-    def s(i, j):
-        return sum(p[i:j])
-    @cache
-    def w(i, j):
-        # if i == j:
-        if (t := s(i, j)) == 0:
-            return 0
-        return 1 + min(
-            s(i, k) * w(i, k) + s(k+1, j) * w(k+1, j)
-            for k in range(i, j)
-        )/t
-    return (1 + s(0, k)*w(0, k) + s(k+1, n)*w(k+1, n) for k in range(n)) if u else w(0, n)
+    s = np.insert(np.cumsum(p), 0, 0)
+    s = s - s.reshape(-1, 1)
+    w = np.zeros((n+1, n+1))
+    for d in range(1, n+1):
+        for i in range(n+1-d):
+            j = i+d
+            if (t := s[i, j]) == 0:
+                continue
+            r = np.arange(i, j)
+            w[i, j] = 1 + np.min(s[i, r] * w[i, r] + s[r+1, j] * w[r+1, j])/t
+    if u:
+        r = np.arange(len(p))
+        return 1 + s[0, r]*w[0, r] + s[r+1, n]*w[r+1, n]
+    return w[0, n]
 
 
 def optim(N, full=False, decr=True, tol=1e-10, randinit=0, **kwargs):
     def fun(x):
         p = x[:-1]
         u = x[-1]
-        rtn = sum((uk-u)**2 for uk in v(p, N, u=True))
+        # rtn = sum((uk-u)**2 for uk in v(p, N, u=True))
+        rtn = np.sum(np.square(v(p, N, u=True)-u))
         return rtn
     n = N if full else (N+1)//2
     if full or N < 7:
@@ -94,7 +96,7 @@ def solution(m, N, printing=True, **kwargs):
     fracs = fractionalize(ps, **kwargs)
     if fracs is None:
         return
-    un = list(v(fracs, N, u=True))
+    un = list(vc(fracs, u=True))
     uf = min(un)
     vf = vc(fracs)
     d_lcm = lcm(*(f.denominator for f in fracs))
@@ -102,12 +104,12 @@ def solution(m, N, printing=True, **kwargs):
         if printing:
             print("fractional sol unsat")
             print(ps*d_lcm)
-            print(f"un = {un}")
+            print(f"un = {fraclist_str(un)}")
             print(f"uf = {uf}")
             print(f"vf = {vf}")
         return
 
-    ns = [pi.numerator*round(d_lcm/pi.denominator) for pi in fracs]
+    ns = [pi.numerator*(d_lcm//pi.denominator) for pi in fracs]
     json_d['p_nums'] = ns
     json_d['p_den'] = d_lcm
     if printing:
