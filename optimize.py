@@ -96,7 +96,7 @@ def solution(m, N, printing=True, **kwargs):
         return
     un = list(v(fracs, N, u=True))
     uf = min(un)
-    vf = vr(fracs)
+    vf = vc(fracs)
     d_lcm = lcm(*(f.denominator for f in fracs))
     if uf != vf or any(uk != uf for uk in un):
         if printing:
@@ -161,7 +161,7 @@ def approx(N, maxtries=3, printing=True, **kwargs):
         p = mirror(p, N)
         json_d['p'] = p.tolist()
         u = m.x[-1]
-        w = vr(p)
+        w = vc(p)
         json_d['u'] = u
         json_d['v'] = w
         if printing:

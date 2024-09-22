@@ -116,7 +116,7 @@ def solution(m, printing=True, **kwargs):
     ur = m[u].as_fraction()
     if printing:
         print(f"v = {ur}")
-    assert ur == vr(pr)
+    assert ur == vc(pr)
     json_d['v_num'] = ur.numerator
     json_d['v_den'] = ur.denominator
     return json_d

@@ -16,6 +16,22 @@ def vr(p):
     )/sum(p)
 
 
+def vc(p):
+    @cache
+    def s(i, j):
+        return sum(p[i:j])
+    @cache
+    def w(i, j):
+        # if i == j:
+        if (t := s(i, j)) == 0:
+            return 0
+        return 1 + min(
+            s(i, k) * w(i, k) + s(k+1, j) * w(k+1, j)
+            for k in range(i, j)
+        )/t
+    return w(0, len(p))
+
+
 def tree(p, ki=None):
     @cache
     def s(i, j):
